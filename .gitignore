@@ -11,8 +11,7 @@ env/
 .env.*
 !.env.example
 
-# ── Screenshots are added manually ──
-screenshots/
+
 
 # ── OS junk ────────────────────────────────────────────
 .DS_Store
