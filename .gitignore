@@ -1,0 +1,34 @@
+# ── Python ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ── Environment & secrets (seriously, don't commit this) ──
+.env
+.env.*
+!.env.example
+
+# ── Screenshots are added manually ──
+screenshots/
+
+# ── OS junk ────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Editor / IDE ───────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Docker / runtime ───────────────────────────────────
+*.log
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Uploads / generated files ──────────────────────────
+static/uploads/
