@@ -13,18 +13,22 @@ from tools import (  # noqa: E402
     list_tasks,
     patch_task,
     update_task,
+    execute_readonly_sql
 )
 
-MODEL = os.getenv("MODEL", "gpt-5.6")
+MODEL = os.getenv("MODEL", "gpt-4.1-mini")
 
 todo_agent = Agent(
     name="Todo",
     instructions=(
         "You are a helpful task manager. Manage the user's todo list through the "
         "provided tools: list, get, create, update (full replace), patch (partial "
-        "update), and delete tasks. Priority must be one of low, medium, or high. "
-        "When a user describes a task, use the tools to act on it. Keep answers "
-        "concise and confirm what you did."
+        "update), delete tasks, and execute_readonly_sql for reporting. "
+        "Use execute_readonly_sql only when the user asks for statistics, summaries, "
+        "counts, or reports. Only generate SELECT queries with it; never modify the "
+        "database through SQL. Priority must be one of low, medium, or high. "
+        "When a user describes a task, use the appropriate tools to act on it. "
+        "Keep answers concise and confirm what you did."
     ),
     model=MODEL,
     tools=[
@@ -34,5 +38,6 @@ todo_agent = Agent(
         update_task,
         patch_task,
         delete_task,
+        execute_readonly_sql
     ],
 )
