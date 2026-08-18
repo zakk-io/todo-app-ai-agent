@@ -10,6 +10,13 @@ from pydantic import BaseModel  # noqa: E402
 
 from agent_def import todo_agent  # noqa: E402
 from agents import Runner, RunState  # noqa: E402
+from agents.tracing import set_trace_processors  # noqa: E402
+from agents.tracing.processors import (  # noqa: E402
+    BatchTraceProcessor,
+    ConsoleSpanExporter,
+)
+
+set_trace_processors([BatchTraceProcessor(ConsoleSpanExporter())])
 
 app = FastAPI(title="Todo Agent Chat")
 
