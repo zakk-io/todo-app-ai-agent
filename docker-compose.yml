@@ -23,10 +23,24 @@ services:
       db:
         condition: service_healthy
 
-  agent:
+  openai-agent:
     build: ./ai-agent-openai
     ports:
       - "8080:8080"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      MODEL: ${MODEL:-gpt-5.6}
+      API_BASE_URL: http://app:8000
+      DATABASE_URL: postgresql://todo:todo@db:5432/todo_db
+      OPENAI_AGENTS_DONT_LOG_MODEL_DATA: "false"
+      OPENAI_AGENTS_DONT_LOG_TOOL_DATA: "false"
+    depends_on:
+      - app
+
+  langchain-agent:
+    build: ./ai-agent-langchain
+    ports:
+      - "8081:8081"
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       MODEL: ${MODEL:-gpt-5.6}
