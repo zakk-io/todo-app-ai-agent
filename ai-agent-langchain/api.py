@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from agent import todo_agent
 from fastapi.middleware.cors import CORSMiddleware 
 import os
-
+from agent import AgentResponse
 app = FastAPI()
 
 app.add_middleware(
@@ -21,7 +21,7 @@ class ChatRequest(BaseModel):
 
 
 class ChatResponse(BaseModel):
-    response: str
+    response: AgentResponse
 
 
 @app.post("/chat", response_model=ChatResponse)
@@ -36,8 +36,7 @@ async def chat(request: ChatRequest):
         ]
     })
 
-    final_message = result["messages"][-1]
 
     return ChatResponse(
-        response=final_message.content
+        response=result["structured_response"]
     )

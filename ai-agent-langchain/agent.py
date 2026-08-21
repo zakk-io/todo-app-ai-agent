@@ -2,7 +2,7 @@
 import os
 from dotenv import load_dotenv
 from langchain.agents import create_agent
-
+from pydantic import BaseModel, Field
 load_dotenv()
 
 from tools import (  # noqa: E402
@@ -16,6 +16,11 @@ from tools import (  # noqa: E402
 )
 
 MODEL = os.getenv("MODEL", "gpt-4.1-mini")
+
+
+class AgentResponse(BaseModel):
+    text: str = Field(..., description="The response from the agent")
+    tools_used: list[str] = Field(default_factory=list, description="The tools used by the agent")
 
 
 todo_agent = create_agent(
@@ -39,4 +44,5 @@ todo_agent = create_agent(
         "When a user describes a task, use the appropriate tools to act on it. "
         "Keep answers concise and confirm what you did."
     ),
+    response_format=AgentResponse
 )
