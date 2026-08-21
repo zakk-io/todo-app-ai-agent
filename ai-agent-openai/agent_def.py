@@ -1,5 +1,5 @@
 import os
-
+from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,6 +17,11 @@ from tools import (  # noqa: E402
 )
 
 MODEL = os.getenv("MODEL", "gpt-4.1-mini")
+
+class AgentResponse(BaseModel):
+    text: str = Field(..., description="The response from the agent")
+    tools_used: list[str] = Field(..., description="List of tools used by the agent")
+
 
 todo_agent = Agent(
     name="Todo",
@@ -40,4 +45,5 @@ todo_agent = Agent(
         delete_task,
         execute_readonly_sql
     ],
+    output_type=AgentResponse
 )

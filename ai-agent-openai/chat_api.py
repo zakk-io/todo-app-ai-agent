@@ -7,7 +7,7 @@ load_dotenv()
 from fastapi import FastAPI  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
-
+from agent_def import AgentResponse
 from agent_def import todo_agent  # noqa: E402
 from agents import Runner, RunState  # noqa: E402
 from agents.tracing import set_trace_processors  # noqa: E402
@@ -43,7 +43,7 @@ class ApprovelRequest(BaseModel):
 class ChatResponse(BaseModel):
     status: str
     approval: dict | None = None
-    response: str | None = None
+    response: AgentResponse | None = None
     state: dict | None = None
 
 
@@ -64,9 +64,11 @@ async def chat(req: ChatRequest):
             state=state.to_json(),
         )
 
+    final = result.final_output
+
     return ChatResponse(
         status="completed",
-        response=result.final_output,
+        response=final
     )
     
 
@@ -102,9 +104,12 @@ async def approve(req: ApprovelRequest):
         state,
     )
 
+    final = result.final_output
+
     return ChatResponse(
         status="completed",
-        response=result.final_output,
+        response=final.response,
+        tools_used=final.tools_used,
     )
     
         
